@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using H_Plust_Sports.Models;
+using H_Plus_Sports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace H_Plust_Sports.Controllers
+namespace H_Plus_Sports.Controllers
 {
     [Produces("application/json")]
     [Route("api/Customers")]

@@ -1,8 +1,9 @@
 ﻿using System;
+using H_Plus_Sports.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace H_Plust_Sports.Models
+namespace H_Plus_Sports.Models
 {
     public partial class H_Plus_SportsContext : DbContext
     {

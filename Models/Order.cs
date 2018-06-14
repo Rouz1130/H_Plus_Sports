@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace H_Plust_Sports.Models
+namespace H_Plus_Sports.Models
 {
     public partial class Order
     {
