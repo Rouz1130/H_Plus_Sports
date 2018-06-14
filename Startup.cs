@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace H_Plust_Sports
+namespace H_Plus_Sports
 {
     public class Startup
     {

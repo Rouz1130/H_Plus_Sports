@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H_Plust_Sports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace H_Plust_Sports.Controllers
 {
@@ -11,40 +13,55 @@ namespace H_Plust_Sports.Controllers
     [Route("api/Customers")]
     public class CustomersController : Controller
     {
-        //Constructor
-        public CustomersController()
-        {
 
+       ///<summary>
+       ///Constructor. Private variable contain reference to the Dbcontext our actions can use. 
+       ///Injected our DbContext into the constructor. 
+       ///</summary>
+        private readonly H_Plus_SportsContext _context;
+        public CustomersController(H_Plus_SportsContext context)
+        {
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult GetCustomer()
         {
-           return Ok();
+            return new ObjectResult(_context.Customer);
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult GetCustomer([FromRoute] int id)
+        [HttpGet("{Id}", Name = "GetCustomer")]
+        public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
-            return Ok(); 
+            var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
+            return Ok(customer);
         }
 
         [HttpPost]
-        public IActionResult PostCustomer([FromBody] Object obj)
+        public async Task <IActionResult> PostCustomer([FromBody] Customer customer)
         {
-            return Ok();
+            _context.Customer.Add(customer);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("getCustomer", new { id = customer.CustomerId }, customer);
         }
 
         [HttpPut("{id})")]
-        public IActionResult PutCustomer([FromRoute] int id, [FromBody] Object obj)
+        public async Task<IActionResult> PutCustomer([FromRoute] int id, [FromBody] Customer customer)
         {
-            return Ok();
+
+            _context.Entry(customer).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(customer);
         }
 
         [HttpDelete("{id})")]
-        public IActionResult DeleteCustomer([FromRoute]int id)
+        public async Task <IActionResult> DeleteCustomer([FromRoute]int id)
         {
-            return Ok();
+            var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
+            _context.Customer.Remove(customer);
+            await _context.SaveChangesAsync();
+            return Ok(customer);
         }
 
     }
