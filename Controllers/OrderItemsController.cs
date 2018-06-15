@@ -37,7 +37,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.OrderItem.Add(orderItem);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("getOrderItem", new { id = orderItem.OrderItemId }, orderItem);
+            return CreatedAtAction("GetOrderItem", new { id = orderItem.OrderItemId }, orderItem);
         }
 
         [HttpPut("{id}")]

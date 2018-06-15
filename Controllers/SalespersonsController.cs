@@ -25,7 +25,7 @@ namespace HPlusSportsAPI.Controllers
             return new OkObjectResult(_context.Salesperson);
         }
 
-        [HttpGet("{id}", Name ="GetSalesperson")]
+        [HttpGet("{id}",Name ="GetSalesperson")]
         public async Task<IActionResult> GetSalesperson([FromRoute] int id)
         {
             var salesperson = await _context.Salesperson.SingleOrDefaultAsync(m => m.SalespersonId == id);
@@ -37,7 +37,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Salesperson.Add(salesperson);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("getSalesperson", new { id = salesperson.SalespersonId }, salesperson);
+            return CreatedAtAction("GetSalesperson", new { id = salesperson.SalespersonId }, salesperson);
         }
 
         [HttpPut("{id}")]
@@ -45,7 +45,6 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Entry(salesperson).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
             return Ok();
         }
 
@@ -53,7 +52,7 @@ namespace HPlusSportsAPI.Controllers
         public async Task<IActionResult> DeleteSalesperson([FromRoute] int id)
         {
             var salesperson = await _context.Salesperson.SingleOrDefaultAsync(m=> m.SalespersonId == id);
-            return Ok();
+            return Ok(salesperson);
         }
     }
 }

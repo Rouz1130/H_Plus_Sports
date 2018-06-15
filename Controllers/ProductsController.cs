@@ -37,8 +37,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("getProduct", new { id = product.ProductId }, product);
+            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
         }
 
         [HttpPut("{id}")]
@@ -46,7 +45,6 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
             return Ok(product);
         }
 
@@ -56,8 +54,7 @@ namespace HPlusSportsAPI.Controllers
             var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
-
-            return Ok();
+            return Ok(product);
         }
     }
 }
