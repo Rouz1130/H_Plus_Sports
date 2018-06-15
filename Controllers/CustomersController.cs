@@ -13,7 +13,6 @@ namespace H_Plus_Sports.Controllers
     [Route("api/Customers")]
     public class CustomersController : Controller
     {
-
        ///<summary>
        ///Constructor. Private variable contain reference to the Dbcontext our actions can use. 
        ///Injected our DbContext into the constructor. 
@@ -34,6 +33,7 @@ namespace H_Plus_Sports.Controllers
         public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
             var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
+
             return Ok(customer);
         }
 
@@ -61,6 +61,7 @@ namespace H_Plus_Sports.Controllers
             var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
             _context.Customer.Remove(customer);
             await _context.SaveChangesAsync();
+
             return Ok(customer);
         }
 

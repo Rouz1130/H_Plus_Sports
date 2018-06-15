@@ -37,6 +37,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
+
             return Ok(order);
         }
 
@@ -45,6 +46,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
             return Ok();
         }
 
@@ -53,6 +55,7 @@ namespace HPlusSportsAPI.Controllers
         {
             var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
             _context.Order.Remove(order);
+
             return Ok(order);
         }
     }
