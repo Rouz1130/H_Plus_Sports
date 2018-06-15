@@ -97,8 +97,23 @@ namespace H_Plus_Sports.Controllers
 
             _context.Entry(customer).State = EntityState.Modified;
 
-            await _context.SaveChangesAsync();
-            return Ok(customer);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Ok(customer);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+          
         }
 
         [HttpDelete("{id})")]

@@ -40,6 +40,8 @@ namespace H_Plus_Sports
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();
+
             app.UseMvc();
         }
     }
