@@ -38,7 +38,7 @@ namespace H_Plus_Sports.Controllers
         }
 
         [HttpPost]
-        public async Task <IActionResult> PostCustomer([FromBody] Customer customer)
+        public async Task<IActionResult> PostCustomer([FromBody] Customer customer)
         {
             _context.Customer.Add(customer);
             await _context.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace H_Plus_Sports.Controllers
         }
 
         [HttpDelete("{id})")]
-        public async Task <IActionResult> DeleteCustomer([FromRoute]int id)
+        public async Task<IActionResult> DeleteCustomer([FromRoute]int id)
         {
             var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
             _context.Customer.Remove(customer);

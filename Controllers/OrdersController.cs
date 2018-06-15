@@ -25,24 +25,23 @@ namespace HPlusSportsAPI.Controllers
             return new ObjectResult(_context.Order);
         }
 
-        [HttpGet("{id}", Name = "Order")]
-        public async Task <IActionResult> GetOrder([FromRoute] int id)
+        [HttpGet("{id}", Name = "GetOrder")]
+        public async Task<IActionResult> GetOrder([FromRoute] int id)
         {
             var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
             return Ok(order);
         }
 
         [HttpPost]
-        public async Task <IActionResult> PostOrder([FromBody] Order order)
+        public async Task<IActionResult> PostOrder([FromBody] Order order)
         {
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
-
-            return Ok(order);
+            return CreatedAtAction("getOrder", new { id = order.OrderId }, order);
         }
 
         [HttpPut("{id}")]
-        public async Task <IActionResult> PutOrder([FromRoute] int id, [FromBody] Order order)
+        public async Task<IActionResult> PutOrder([FromRoute] int id, [FromBody] Order order)
         {
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -51,7 +50,7 @@ namespace HPlusSportsAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task <IActionResult> DeleteOrder([FromRoute] int id)
+        public async Task<IActionResult> DeleteOrder([FromRoute] int id)
         {
             var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
             _context.Order.Remove(order);

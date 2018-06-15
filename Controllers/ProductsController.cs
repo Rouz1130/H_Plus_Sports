@@ -26,17 +26,18 @@ namespace HPlusSportsAPI.Controllers
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
-        public async Task <IActionResult> GetProduct([FromRoute] string id)
+        public async Task<IActionResult> GetProduct([FromRoute] string id)
         {
             var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
             return Ok(product);
         }
 
         [HttpPost]
-        public async Task <IActionResult> PostProduct([FromBody] Product product)
+        public async Task<IActionResult> PostProduct([FromBody] Product product)
         {
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction("getProduct", new { id = product.ProductId }, product);
         }
 
@@ -45,6 +46,7 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
             return Ok(product);
         }
 
@@ -54,6 +56,7 @@ namespace HPlusSportsAPI.Controllers
             var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
             _context.Product.Remove(product);
             await _context.SaveChangesAsync();
+
             return Ok();
         }
     }

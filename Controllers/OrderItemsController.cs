@@ -28,13 +28,12 @@ namespace HPlusSportsAPI.Controllers
         [HttpGet("{id}", Name = "GetOrderItem")]
         public async Task<IActionResult> GetOrderItem([FromRoute] int id)
         {
-
             var orderItem = await _context.OrderItem.SingleOrDefaultAsync(m => m.OrderItemId == id);
             return Ok(orderItem);
         }
 
         [HttpPost]
-        public async Task <IActionResult> PostOrderItem([FromBody] OrderItem orderItem)
+        public async Task<IActionResult> PostOrderItem([FromBody] OrderItem orderItem)
         {
             _context.OrderItem.Add(orderItem);
             await _context.SaveChangesAsync();
@@ -46,15 +45,17 @@ namespace HPlusSportsAPI.Controllers
         {
             _context.Entry(orderItem).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
             return Ok(orderItem);
         }
 
         [HttpDelete("{id}")]
-        public async Task <IActionResult> DeleteOrderItem([FromRoute] int id)
+        public async Task<IActionResult> DeleteOrderItem([FromRoute] int id)
         {
             var orderItem = await _context.OrderItem.SingleOrDefaultAsync(m => m.OrderItemId == id);
             _context.OrderItem.Remove(orderItem);
             await _context.SaveChangesAsync();
+
             return Ok(orderItem);
         }
     }
