@@ -1,5 +1,6 @@
 ﻿using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,48 @@ namespace H_Plus_Sports.Repositories
 {
     public class ProductsRepository : IProductsRepository
     {
-        public Task<Product> Add(Product product)
-        {
-            throw new NotImplementedException();
-        }
+        private H_Plus_SportsContext _context;
 
-        public Task<bool> Exists(int id)
+        public ProductsRepository(H_Plus_SportsContext context)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Product> Find(int id)
-        {
-            throw new NotImplementedException();
+            _context = context;
         }
 
         public IEnumerable<Product> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Product;
         }
 
-        public Task<Product> Remove(int id)
+        public async Task<Product> Add(Product product)
         {
-            throw new NotImplementedException();
+            await _context.Product.AddAsync(product);
+            await _context.SaveChangesAsync();
+            return product;
         }
 
-        public Task<Product> Update(Product product)
+        public async Task<Product> Find(string id)
         {
-            throw new NotImplementedException();
+            return await _context.Product.Include(product => product.OrderItem).SingleOrDefaultAsync(a => a.ProductId == id);
+        }
+
+        public async Task<Product> Remove(string id)
+        {
+            var product = await _context.Product.SingleAsync(a => a.ProductId == id);
+            _context.Product.Remove(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<Product> Update(Product product)
+        {
+            _context.Product.Update(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<bool> Exists(string id)
+        {
+            return await _context.Product.AnyAsync(e => e.ProductId == id);
         }
     }
 }

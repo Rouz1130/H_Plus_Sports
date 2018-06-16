@@ -41,11 +41,12 @@ namespace H_Plus_Sports.Repositories
 
         public async Task<Customer> Remove(int id)
         {
-            var customer = await _context.Customer.SingleOrDefaultAsync(a => a.CustomerId == id);
+            var customer = await _context.Customer.SingleAsync(a => a.CustomerId == id);
             _context.Customer.Remove(customer);
             await _context.SaveChangesAsync();
             return customer;
         }
+    
 
         public async Task<Customer> Update(Customer customer)
         {

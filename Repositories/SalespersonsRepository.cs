@@ -1,5 +1,6 @@
 ﻿using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,48 @@ namespace H_Plus_Sports.Repositories
 {
     public class SalespersonsRepository : ISalespersonsRepository
     {
-        public Task<Salesperson> Add(Salesperson salesperson)
-        {
-            throw new NotImplementedException();
-        }
+        private H_Plus_SportsContext _context;
 
-        public Task<bool> Exists(int id)
+        public SalespersonsRepository(H_Plus_SportsContext context)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<Salesperson> Find(int id)
-        {
-            throw new NotImplementedException();
+            _context = context;
         }
 
         public IEnumerable<Salesperson> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Salesperson;
         }
 
-        public Task<Salesperson> Remove(int id)
+        public async Task<Salesperson> Add(Salesperson salesperson)
         {
-            throw new NotImplementedException();
+            await _context.Salesperson.AddAsync(salesperson);
+            await _context.SaveChangesAsync();
+            return salesperson;
         }
 
-        public Task<Salesperson> Update(Salesperson salesperson)
+        public async Task<Salesperson> Find(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Salesperson.Include(salesperson => salesperson.Order).SingleOrDefaultAsync(a => a.SalespersonId == id);
+        }
+
+        public async Task<Salesperson> Remove(int id)
+        {
+            var salesperson = await _context.Salesperson.SingleAsync(a => a.SalespersonId == id);
+            _context.Salesperson.Remove(salesperson);
+            await _context.SaveChangesAsync();
+            return salesperson;
+        }
+
+        public async Task<Salesperson> Update(Salesperson salesperson)
+        {
+            _context.Salesperson.Update(salesperson);
+            await _context.SaveChangesAsync();
+            return salesperson;
+        }
+
+        public async Task<bool> Exists(int id)
+        {
+            return await _context.Order.AnyAsync(e => e.OrderId == id);
         }
     }
 }

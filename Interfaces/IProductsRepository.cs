@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace H_Plus_Sports.Interfaces
 {
-    interface IProductsRepository
+    public interface IProductsRepository
     {
         Task<Product> Add(Product product);
         IEnumerable<Product> GetAll();
-        Task<Product> Find(int id);
+        Task<Product> Find(string id);
         Task<Product> Update(Product product);
-        Task<Product> Remove(int id);
-        Task<bool> Exists(int id);
+        Task<Product> Remove(string id);
+        Task<bool> Exists(string id);
     }
 }
