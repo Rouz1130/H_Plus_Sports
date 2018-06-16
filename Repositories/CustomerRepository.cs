@@ -31,7 +31,7 @@ namespace H_Plus_Sports.Repositories
 
         public async Task<Customer> Find(int id)
         {
-            return await _context.Customer.Include(customer => customer.Order).SingleOrDefaultAsync();
+            return await _context.Customer.Include(customer => customer.Order).SingleOrDefaultAsync(a => a.CustomerId == id);
         }
 
         public IEnumerable<Customer> GetAll()

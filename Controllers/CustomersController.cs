@@ -46,7 +46,7 @@ namespace H_Plus_Sports.Controllers
             return results;
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         [Produces(typeof(Customer))]
         public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
