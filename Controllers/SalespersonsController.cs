@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,22 +14,22 @@ namespace HPlusSportsAPI.Controllers
     [Route("api/Salespersons")]
     public class SalespersonsController : Controller
     {
-        private readonly H_Plus_SportsContext _context;
-        public SalespersonsController(H_Plus_SportsContext context)
+        private readonly ISalespersonsRepository _salespeople;
+        public SalespersonsController(ISalespersonsRepository salespeople)
         {
-            _context = context;
+            _salespeople = salespeople;
         }
 
-        private bool SalespersonExists(int id)
+        private async Task<bool> SalespersonExists(int id)
         {
-            return _context.Salesperson.Any(e => e.SalespersonId == id);
+            return await _salespeople.Exists(id);
         }
 
         [HttpGet]
         [Produces(typeof(DbSet<Salesperson>))]
         public IActionResult GetSalesperson()
         {
-            return new OkObjectResult(_context.Salesperson);
+            return new OkObjectResult(_salespeople.GetAll());
         }
 
         [HttpGet("{id}")]
@@ -40,7 +41,7 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var salesperson = await _context.Salesperson.SingleOrDefaultAsync(m => m.SalespersonId == id);
+            var salesperson = await _salespeople.Find(id);
 
             if (salesperson == null)
             {
@@ -58,8 +59,22 @@ namespace HPlusSportsAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Salesperson.Add(salesperson);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _salespeople.Add(salesperson);
+            }
+            catch(DbUpdateException)
+            {
+                if (!await SalespersonExists(salesperson.SalespersonId))
+                {
+                    return NotFound();
+
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
 
             return CreatedAtAction("GetSalesperson", new { id = salesperson.SalespersonId }, salesperson);
         }
@@ -78,22 +93,20 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(salesperson).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _salespeople.Update(salesperson);
                 return Ok(salesperson);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SalespersonExists(id))
+                if (!await SalespersonExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
         }
@@ -107,16 +120,14 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var salesperson = await _context.Salesperson.SingleOrDefaultAsync(m => m.SalespersonId == id);
-            if (salesperson == null)
+            if (!await SalespersonExists(id))
             {
                 return NotFound();
             }
 
-            _context.Salesperson.Remove(salesperson);
-            await _context.SaveChangesAsync();
+            await _salespeople.Remove(id);
 
-            return Ok(salesperson);
+            return Ok();
         }
     }
 }

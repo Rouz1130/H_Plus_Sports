@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,23 +14,23 @@ namespace HPlusSportsAPI.Controllers
     [Route("api/Orders")]
     public class OrdersController : Controller
     {
-        private readonly H_Plus_SportsContext _context;
+        private readonly IOrdersRepository _orders;
 
-        public OrdersController(H_Plus_SportsContext context)
+        public OrdersController(IOrdersRepository orders)
         {
-            _context = context;
+            _orders =  orders;
         }
 
-        private bool OrderExists(int id)
+        private async Task<bool> OrderExists(int id)
         {
-            return _context.Order.Any(e => e.OrderId == id);
+            return await _orders.Exists(id);
         }
     
         [HttpGet]
         [Produces(typeof(DbSet<Order>))]
         public IActionResult GetOrder()
         {
-            return new ObjectResult(_context.Order);
+            return new ObjectResult(_orders.GetAll());
         }
 
         [HttpGet("{id}")]
@@ -41,7 +42,7 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
+            var order = await _orders.Find(id);
 
             if (order == null)
             {
@@ -60,8 +61,21 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Order.Add(order);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _orders.Add(order);
+            }
+            catch
+            {
+                if (!await OrderExists(order.OrderId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
 
             return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
         }
@@ -80,22 +94,20 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(order).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-                return Ok();
+                await _orders.Update(order);
+                return Ok(order);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OrderExists(id))
+                if (!await OrderExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
         }
@@ -109,14 +121,14 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = await _context.Order.SingleOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
+            if (!await OrderExists(id))
             {
                 return NotFound();
             }
 
-            _context.Order.Remove(order);
-            return Ok(order);
+            await _orders.Remove(id);
+
+            return Ok();
         }
     }
 }

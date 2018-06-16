@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace H_Plus_Sports.Interfaces
 {
-    interface IOrderItemsRepository
+   public interface IOrderItemsRepository
     {
         Task<OrderItem> Add(OrderItem orderItem);
         IEnumerable<OrderItem> GetAll();

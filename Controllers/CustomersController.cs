@@ -27,7 +27,7 @@ namespace H_Plus_Sports.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task <bool> CustomerExists(int id)
+        private async Task<bool> CustomerExists(int id)
         {
             return await _customerRepository.Exists(id);
         }
