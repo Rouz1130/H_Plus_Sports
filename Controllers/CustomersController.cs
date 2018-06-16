@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,35 +15,33 @@ namespace H_Plus_Sports.Controllers
     [Route("api/Customers")]
     public class CustomersController : Controller
     {
-       ///<summary>
-       ///Constructor. Private variable contain reference to the Dbcontext our actions can use. 
-       ///Injected our DbContext into the constructor. 
-       ///</summary>
-        private readonly H_Plus_SportsContext _context;
-        public CustomersController(H_Plus_SportsContext context)
+        private readonly ICustomerRepository _customerRepository;
+
+        public CustomersController(ICustomerRepository customerRepository)
+
         {
-            _context = context;
+            _customerRepository = customerRepository;
         }
         /// <summary>
         /// Method correlated to GetCusotmer method, check to see if customer exists or not.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private bool CustomerExists(int id)
+        private async Task <bool> CustomerExists(int id)
         {
-            return _context.Customer.Any(c => c.CustomerId == id);
+            return await _customerRepository.Exists(id);
         }
 
         [HttpGet]
         [Produces(typeof(DbSet<Customer>))]
         public IActionResult GetCustomer()
         {
-            var results = new ObjectResult(_context.Customer)
+            var results = new ObjectResult(_customerRepository.GetAll())
             {
                 StatusCode = (int)HttpStatusCode.OK
             };
 
-            Request.HttpContext.Response.Headers.Add("X-Total-Count", _context.Customer.Count().ToString());
+            Request.HttpContext.Response.Headers.Add("X-Total-Count", _customerRepository.GetAll().Count().ToString());
 
             return results;
         }
@@ -56,7 +55,7 @@ namespace H_Plus_Sports.Controllers
                 return BadRequest(ModelState);
             }
 
-            var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
+            var customer = await _customerRepository.Find(id);
 
             if (customer == null)
             {
@@ -75,9 +74,8 @@ namespace H_Plus_Sports.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Customer.Add(customer);
-            await _context.SaveChangesAsync();
-
+            await _customerRepository.Add(customer);
+      
             return CreatedAtAction("getCustomer", new { id = customer.CustomerId }, customer);
         }
 
@@ -95,16 +93,14 @@ namespace H_Plus_Sports.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _customerRepository.Update(customer);
                 return Ok(customer);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!await CustomerExists(id))
                 {
                     return NotFound();
                 }
@@ -125,16 +121,14 @@ namespace H_Plus_Sports.Controllers
                 return BadRequest(ModelState);
             }
 
-            var customer = await _context.Customer.SingleOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
+            if (! await CustomerExists(id))
             {
                 return NotFound();
             }
 
-            _context.Customer.Remove(customer);
-            await _context.SaveChangesAsync();
-
-            return Ok(customer);
+            await _customerRepository.Remove(id);
+      
+            return Ok();
         }
 
     }
