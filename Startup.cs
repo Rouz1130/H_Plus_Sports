@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
+using H_Plus_Sports.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,11 @@ namespace H_Plus_Sports
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<ISalespersonsRepository, SalespersonsRepository>();
             services.AddMvc();
 
             var connection = "Server=tcp:hsportsmajlessi.database.windows.net,1433;Initial Catalog=H_Plus_Sports;Persist Security Info=False;User ID=rouzMajlessi;Password=Rouz2416!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";

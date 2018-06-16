@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace H_Plus_Sports.Interfaces
 {
     public interface ICustomerRepository
-    {
+    { 
         Task<Customer> Add(Customer customer);
         IEnumerable<Customer> GetAll();
         Task<Customer> Find(int id);

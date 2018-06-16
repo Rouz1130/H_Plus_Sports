@@ -1,5 +1,6 @@
 ﻿using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,48 @@ namespace H_Plus_Sports.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        public Task<Customer> Add(Customer customer)
+        private H_Plus_SportsContext _context;
+
+        public CustomerRepository(H_Plus_SportsContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<bool> Exists(int id)
+        public async Task<Customer> Add(Customer customer)
         {
-            throw new NotImplementedException();
+            await _context.Customer.AddAsync(customer);
+            await _context.SaveChangesAsync();
+            return customer;
         }
 
-        public Task<Customer> Find(int id)
+        public async Task<bool> Exists(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Customer.AnyAsync(c => c.CustomerId == id);
+        }
+
+        public async Task<Customer> Find(int id)
+        {
+            return await _context.Customer.Include(customer => customer.Order).SingleOrDefaultAsync();
         }
 
         public IEnumerable<Customer> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Customer;
         }
 
-        public Task<Customer> Remove(int id)
+        public async Task<Customer> Remove(int id)
         {
-            throw new NotImplementedException();
+            var customer = await _context.Customer.SingleOrDefaultAsync(a => a.CustomerId == id);
+            _context.Customer.Remove(customer);
+            await _context.SaveChangesAsync();
+            return customer;
         }
 
-        public Task<Customer> Update(Customer customer)
+        public async Task<Customer> Update(Customer customer)
         {
-            throw new NotImplementedException();
+            _context.Customer.Update(customer);
+            await _context.SaveChangesAsync();
+            return customer;
         }
     }
 }
