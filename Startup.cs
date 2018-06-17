@@ -33,7 +33,7 @@ namespace H_Plus_Sports
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISalespersonsRepository, SalespersonRepository>();
 
-            services.AddResponseCaching();
+            services.AddMemoryCache();
 
             services.AddMvc();
 
@@ -50,7 +50,7 @@ namespace H_Plus_Sports
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseResponseCaching();
+            
 
             app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();
 

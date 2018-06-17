@@ -1,6 +1,7 @@
 ﻿using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace H_Plus_Sports.Repositories
     public class ProductRepository : IProductRepository
     {
         private H_Plus_SportsContext _context;
+        private IMemoryCache _cache;
 
-        public ProductRepository(H_Plus_SportsContext context)
+        public ProductRepository(H_Plus_SportsContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public IEnumerable<Product> GetAll()
@@ -29,9 +32,30 @@ namespace H_Plus_Sports.Repositories
             return product;
         }
 
+        /// <summary>
+        /// Add In-Memory cacheing, For example cuts server time in half to reload page.
+        /// Flow add To Startup Configure services, Add private variable in controller and add to method. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Product> Find(string id)
         {
-            return await _context.Product.Include(product => product.OrderItem).SingleOrDefaultAsync(a => a.ProductId == id);
+            var cacheProduct = _cache.Get<Product>(id);
+
+            if (cacheProduct != null)
+            {
+                return cacheProduct;
+            }
+            else
+            {
+                var dbProduct = await _context.Product.Include(product => product.OrderItem).SingleOrDefaultAsync(a => a.ProductId == id);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(60));
+                _cache.Set(dbProduct.ProductId, dbProduct, cacheEntryOptions);
+
+                return dbProduct;
+            }
         }
 
         public async Task<Product> Remove(string id)
