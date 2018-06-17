@@ -7,7 +7,7 @@ ways for caching data to enhance performance.
 * In-memory caching
 * Distributed caching with Redis
 
-##Concepts
+## Concepts
 Concepts that were implemented for this project.
 *Database on Azure
 *Routing
@@ -18,13 +18,14 @@ Concepts that were implemented for this project.
 *Deployment
 *Caching data
 
-##Known Bugs
+## Known Bugs
 Outside of the Customer controller, every Get by Id method failed in test. Although when deployed and in dev
 tools response works and gets a 200 OK message. 
 
-##Technologies Used
+## Technologies Used
 ASP.NET Core, Azure, MSTest, C#
 
 ##
+June 16, 2018
 Rouz Majlessi
 www.rouzm.com
