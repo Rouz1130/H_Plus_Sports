@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 
 namespace H_Plus_Sports.Repositories
 {
-    public class OrderItemsRepository : IOrderItemsRepository
+    public class OrderItemRepository : IOrderItemRepository
     {
         private H_Plus_SportsContext _context;
 
-
-        public OrderItemsRepository(H_Plus_SportsContext context)
+        public OrderItemRepository(H_Plus_SportsContext context)
         {
             _context = context;
         }
@@ -32,8 +31,11 @@ namespace H_Plus_Sports.Repositories
 
         public async Task<OrderItem> Find(int id)
         {
-            return await _context.OrderItem.Include(orderItem => orderItem.Order).Include(orderItem => orderItem.Product).SingleOrDefaultAsync(a => a.OrderItemId == id);
+
+          return await _context.OrderItem.Include(orderItem => orderItem.Order).Include(orderItem => orderItem.Product).SingleOrDefaultAsync(a => a.OrderItemId == id);
+          
         }
+
 
         public async Task<OrderItem> Remove(int id)
         {

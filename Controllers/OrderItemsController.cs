@@ -15,9 +15,9 @@ namespace HPlusSportsAPI.Controllers
     [Route("api/OrderItems")]
     public class OrderItemsController : Controller
     {
-        private readonly IOrderItemsRepository _orderItems;
+        private readonly IOrderItemRepository _orderItems;
 
-        public OrderItemsController(IOrderItemsRepository orderItems)
+        public OrderItemsController(IOrderItemRepository orderItems)
         {
             _orderItems = orderItems;
         }
@@ -41,6 +41,7 @@ namespace HPlusSportsAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Produces(typeof(OrderItem))]
         public async Task<IActionResult> GetOrderItem([FromRoute] int id)
         {
             if (!ModelState.IsValid)

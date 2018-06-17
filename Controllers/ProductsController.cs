@@ -14,8 +14,8 @@ namespace HPlusSportsAPI.Controllers
     [Route("api/Products")]
     public class ProductsController : Controller
     {
-        private readonly IProductsRepository _products;
-        public ProductsController(IProductsRepository products)
+        private readonly IProductRepository _products;
+        public ProductsController(IProductRepository products)
         {
             _products = products;
         }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace H_Plus_Sports.Repositories
 {
-    public class ProductsRepository : IProductsRepository
+    public class ProductRepository : IProductRepository
     {
         private H_Plus_SportsContext _context;
 
-        public ProductsRepository(H_Plus_SportsContext context)
+        public ProductRepository(H_Plus_SportsContext context)
         {
             _context = context;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
@@ -14,23 +15,30 @@ namespace HPlusSportsAPI.Controllers
     [Route("api/Orders")]
     public class OrdersController : Controller
     {
-        private readonly IOrdersRepository _orders;
+        private readonly IOrderRepository _ordersRepository;
 
-        public OrdersController(IOrdersRepository orders)
+        public OrdersController(IOrderRepository ordersRepository)
         {
-            _orders =  orders;
+            _ordersRepository = ordersRepository;
         }
 
         private async Task<bool> OrderExists(int id)
         {
-            return await _orders.Exists(id);
+            return await _ordersRepository.Exists(id);
         }
-    
+
         [HttpGet]
-        [Produces(typeof(DbSet<Order>))]
-        public IActionResult GetOrder()
+        [Produces(typeof(DbSet<Customer>))]
+        public IActionResult GetCustomer()
         {
-            return new ObjectResult(_orders.GetAll());
+            var results = new ObjectResult(_ordersRepository.GetAll())
+            {
+                StatusCode = (int)HttpStatusCode.OK
+            };
+
+            Request.HttpContext.Response.Headers.Add("X-Total-Count", _ordersRepository.GetAll().Count().ToString());
+
+            return results;
         }
 
         [HttpGet("{id}")]
@@ -42,7 +50,7 @@ namespace HPlusSportsAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var order = await _orders.Find(id);
+            var order = await _ordersRepository.Find(id);
 
             if (order == null)
             {
@@ -63,7 +71,7 @@ namespace HPlusSportsAPI.Controllers
 
             try
             {
-                await _orders.Add(order);
+                await _ordersRepository.Add(order);
             }
             catch
             {
@@ -96,7 +104,7 @@ namespace HPlusSportsAPI.Controllers
 
             try
             {
-                await _orders.Update(order);
+                await _ordersRepository.Update(order);
                 return Ok(order);
             }
             catch (DbUpdateConcurrencyException)
@@ -126,7 +134,7 @@ namespace HPlusSportsAPI.Controllers
                 return NotFound();
             }
 
-            await _orders.Remove(id);
+            await _ordersRepository.Remove(id);
 
             return Ok();
         }

@@ -2,6 +2,7 @@
 using H_Plus_Sports.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Newtonsoft.Json;
 
 namespace H_Plus_Sports.Models
 {
@@ -9,6 +10,8 @@ namespace H_Plus_Sports.Models
     {
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Order> Order { get; set; }
+
+        [JsonIgnore]
         public virtual DbSet<OrderItem> OrderItem { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<Salesperson> Salesperson { get; set; }

@@ -28,14 +28,14 @@ namespace H_Plus_Sports
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IOrderItemsRepository, OrderItemsRepository>();
-            services.AddScoped<IOrdersRepository, OrdersRepository>();
-            services.AddScoped<IProductsRepository, ProductsRepository>();
-            services.AddScoped<ISalespersonsRepository, SalespersonsRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ISalespersonsRepository, SalespersonRepository>();
             services.AddMvc();
 
             var connection = "Server=tcp:hsportsmajlessi.database.windows.net,1433;Initial Catalog=H_Plus_Sports;Persist Security Info=False;User ID=rouzMajlessi;Password=Rouz2416!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            services.AddDbContext<H_Plus_SportsContext>(opttions => opttions.UseSqlServer(connection));
+            services.AddDbContext<H_Plus_SportsContext>(options => options.UseSqlServer(connection));
 
         }
 

@@ -1,4 +1,3 @@
-C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.csprojAssemblyReference.cache
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.csproj.CoreCompileInputs.cache
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.AssemblyInfoInputs.cache
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.AssemblyInfo.cs
@@ -9,3 +8,4 @@ C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\bin\Debug\netcoreapp
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\bin\Debug\netcoreapp2.0\H_Plus_Sports.pdb
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.dll
 C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.pdb
+C:\Users\rouz\Desktop\Working\H_Plust_Sports\H_Plust_Sports\obj\Debug\netcoreapp2.0\H_Plus_Sports.csprojAssemblyReference.cache
