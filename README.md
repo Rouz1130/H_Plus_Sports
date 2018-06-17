@@ -7,8 +7,8 @@ ways for caching data to enhance performance.
 * In-memory caching
 * Distributed caching with Redis
 
-## Concepts
-Concepts that were implemented for this project.
+## Concepts that were implemented for this project.
+</br>
 *Database on Azure
 *Routing
 *Model binding and valadation
@@ -26,6 +26,6 @@ tools response works and gets a 200 OK message.
 ASP.NET Core, Azure, MSTest, C#
 
 ##
-June 16, 2018
-Rouz Majlessi
+June 16, 2018&nbsp; Rouz Majlessi
+</br>
 www.rouzm.com
