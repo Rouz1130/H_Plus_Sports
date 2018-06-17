@@ -28,17 +28,10 @@ namespace HPlusSportsAPI.Controllers
         }
 
         [HttpGet]
-        [Produces(typeof(DbSet<Customer>))]
-        public IActionResult GetCustomer()
+        [Produces(typeof(DbSet<Order>))]
+        public IActionResult GetOrder()
         {
-            var results = new ObjectResult(_ordersRepository.GetAll())
-            {
-                StatusCode = (int)HttpStatusCode.OK
-            };
-
-            Request.HttpContext.Response.Headers.Add("X-Total-Count", _ordersRepository.GetAll().Count().ToString());
-
-            return results;
+            return new ObjectResult(_ordersRepository.GetAll());
         }
 
         [HttpGet("{id}")]

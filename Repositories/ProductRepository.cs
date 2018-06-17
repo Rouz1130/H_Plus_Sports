@@ -1,7 +1,8 @@
 ﻿using H_Plus_Sports.Interfaces;
 using H_Plus_Sports.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,10 @@ namespace H_Plus_Sports.Repositories
     public class ProductRepository : IProductRepository
     {
         private H_Plus_SportsContext _context;
-        private IMemoryCache _cache;
 
-        public ProductRepository(H_Plus_SportsContext context, IMemoryCache cache)
+        private IDistributedCache _cache;
+
+        public ProductRepository(H_Plus_SportsContext context, IDistributedCache cache)
         {
             _context = context;
             _cache = cache;
@@ -33,29 +35,29 @@ namespace H_Plus_Sports.Repositories
         }
 
         /// <summary>
-        /// Add In-Memory cacheing, For example cuts server time in half to reload page.
-        /// Flow add To Startup Configure services, Add private variable in controller and add to method. 
+        /// Taking a cached product in  Json fromat and converting
+        /// it into C# object that will be returned back to the controller.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+
         public async Task<Product> Find(string id)
         {
-            var cacheProduct = _cache.Get<Product>(id);
+            var cachedProduct = await _cache.GetStringAsync(id);
 
-            if (cacheProduct != null)
+            if (cachedProduct != null)
             {
-                return cacheProduct;
+                return JsonConvert.DeserializeObject<Product>(cachedProduct);
             }
             else
             {
-                var dbProduct = await _context.Product.Include(product => product.OrderItem).SingleOrDefaultAsync(a => a.ProductId == id);
+                var dbProdcuts =  await _context.Product.SingleOrDefaultAsync(a => a.ProductId == id);
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromSeconds(60));
-                _cache.Set(dbProduct.ProductId, dbProduct, cacheEntryOptions);
+                await _cache.SetStringAsync(id, JsonConvert.SerializeObject(dbProdcuts));
 
-                return dbProduct;
+                return dbProdcuts;
             }
+            
         }
 
         public async Task<Product> Remove(string id)

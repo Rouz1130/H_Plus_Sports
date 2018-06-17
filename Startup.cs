@@ -33,7 +33,11 @@ namespace H_Plus_Sports
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISalespersonsRepository, SalespersonRepository>();
 
-            services.AddMemoryCache();
+            services.AddDistributedRedisCache(options =>
+           {
+               options.Configuration = Configuration.GetConnectionString("RedisConnection");
+               options.InstanceName = "master";
+           });
 
             services.AddMvc();
 
@@ -49,8 +53,6 @@ namespace H_Plus_Sports
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            
 
             app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();
 
