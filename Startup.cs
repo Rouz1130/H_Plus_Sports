@@ -32,6 +32,9 @@ namespace H_Plus_Sports
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<ISalespersonsRepository, SalespersonRepository>();
+
+            services.AddResponseCaching();
+
             services.AddMvc();
 
             var connection = "Server=tcp:hsportsmajlessi.database.windows.net,1433;Initial Catalog=H_Plus_Sports;Persist Security Info=False;User ID=rouzMajlessi;Password=Rouz2416!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
@@ -46,6 +49,8 @@ namespace H_Plus_Sports
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseResponseCaching();
 
             app.UseMiddleware<StackifyMiddleware.RequestTracerMiddleware>();
 

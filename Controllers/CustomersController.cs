@@ -34,6 +34,7 @@ namespace H_Plus_Sports.Controllers
 
         [HttpGet]
         [Produces(typeof(DbSet<Customer>))]
+        [ResponseCache(Duration = 60)]
         public IActionResult GetCustomer()
         {
             var results = new ObjectResult(_customerRepository.GetAll())
@@ -48,6 +49,7 @@ namespace H_Plus_Sports.Controllers
 
         [HttpGet("{id}")]
         [Produces(typeof(Customer))]
+        [ResponseCache(Duration = 60)]
         public async Task<IActionResult> GetCustomer([FromRoute] int id)
         {
             if(!ModelState.IsValid)
