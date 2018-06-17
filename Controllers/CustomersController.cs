@@ -31,7 +31,10 @@ namespace H_Plus_Sports.Controllers
         {
             return await _customerRepository.Exists(id);
         }
-
+        /// <summary>
+        /// Response cacheing
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Produces(typeof(DbSet<Customer>))]
         [ResponseCache(Duration = 60)]
