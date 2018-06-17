@@ -8,7 +8,6 @@ ways for caching data to enhance performance.
 * Distributed caching with Redis
 
 ## Concepts
-</br>
 * Database on Azure
 * Routing
 * Model binding and valadation
@@ -23,7 +22,7 @@ Outside of the Customer controller, every Get by Id method failed in test. Altho
 tools response works and gets a 200 OK message. 
 
 ## Technologies Used
-ASP.NET Core, Azure, MSTest, C#
+ASP.NET Core, Azure, C# MSTest
 
 ##
 June 16, 2018&nbsp; Rouz Majlessi
