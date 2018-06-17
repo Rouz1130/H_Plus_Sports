@@ -7,16 +7,16 @@ ways for caching data to enhance performance.
 * In-memory caching
 * Distributed caching with Redis
 
-## Concepts that were implemented for this project.
+## Concepts
 </br>
-*Database on Azure
-*Routing
-*Model binding and valadation
-*Inspecting and optimizing API performance
-*Repository pattern
-*Integration Testing
-*Deployment
-*Caching data
+* Database on Azure
+* Routing
+* Model binding and valadation
+* Inspecting and optimizing API performance
+* Repository pattern
+* Integration Testing
+* Deployment
+* Caching data
 
 ## Known Bugs
 Outside of the Customer controller, every Get by Id method failed in test. Although when deployed and in dev
