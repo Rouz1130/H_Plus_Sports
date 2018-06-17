@@ -79,11 +79,13 @@ namespace H_Plus_Sports.Controllers
             return CreatedAtAction("getCustomer", new { id = customer.CustomerId }, customer);
         }
 
-        [HttpPut("{id})")]
+
+
+        [HttpPut("{id}")]
         [Produces(typeof(Customer))]
         public async Task<IActionResult> PutCustomer([FromRoute] int id, [FromBody] Customer customer)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -106,10 +108,10 @@ namespace H_Plus_Sports.Controllers
                 }
                 else
                 {
-                    throw;
+                    return BadRequest();
                 }
             }
-          
+
         }
 
         [HttpDelete("{id})")]

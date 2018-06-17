@@ -11,7 +11,7 @@ namespace H_Plus_Sports.Interfaces
         Task<Customer> Add(Customer customer);
         IEnumerable<Customer> GetAll();
         Task<Customer> Find(int id);
-        Task<Customer> Update(Customer customer);
+        Task<Customer> Update(Customer item);
         Task<Customer> Remove(int id);
         Task<bool> Exists(int id);
     }
